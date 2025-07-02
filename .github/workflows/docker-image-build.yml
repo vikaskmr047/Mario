@@ -3,7 +3,8 @@ on:
   push:
     branches:
       - main
-
+env:
+  VERSION: $(( cat(version.txt) + 1 ))
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -21,4 +22,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: vks0012/mario:latest
+          tags: vks0012/mario:${{ env.VERSION }}
