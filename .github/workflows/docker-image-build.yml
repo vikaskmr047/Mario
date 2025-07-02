@@ -4,7 +4,8 @@ on:
     branches:
       - main
 env:
-  VERSION: $(( $(cat version.txt) + 1 ))
+   VERSION: $(( $(cat version.txt) + 1 ))
+   
 jobs:
   build:
     runs-on: ubuntu-latest
