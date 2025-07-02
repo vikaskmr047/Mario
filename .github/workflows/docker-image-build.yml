@@ -14,11 +14,11 @@ jobs:
       - name: Read and Bump Version
         id: version
         run: |
-          version=$(cat version.txt)
+          version=$(cat .\version.txt)
           next_version=$((version + 1))
           echo "VERSION=$next_version" >> $GITHUB_ENV
           echo "$next_version" > version.txt
-          
+
       - name: Dockerhub Login
         run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login --username "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
 
