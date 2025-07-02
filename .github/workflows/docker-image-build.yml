@@ -3,8 +3,6 @@ on:
   push:
     branches:
       - main
-env:
-   VERSION: $(( $(cat version.txt) + 1 ))
    
 jobs:
   build:
@@ -13,6 +11,14 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
+      - name: Read and Bump Version
+        id: version
+        run: |
+          version=$(cat version.txt)
+          next_version=$((version + 1))
+          echo "VERSION=$next_version" >> $GITHUB_ENV
+          echo "$next_version" > version.txt
+          
       - name: Dockerhub Login
         run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login --username "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
 
