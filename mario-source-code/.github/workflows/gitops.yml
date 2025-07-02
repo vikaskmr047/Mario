@@ -1,0 +1,25 @@
+name: "Run SAST on mario source code"
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  run-sast:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Fetch all history for accurate analysis
+
+          
+      - name: Run SAST tool
+        uses: sonarsource/sonarqube-scan-action@master
+        env:
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          echo "Running SAST tool on mario source code..."
+          # Replace with actual SAST command, e.g., sonar-scanner or similar
+          echo "SAST analysis completed."
