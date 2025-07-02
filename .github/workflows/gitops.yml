@@ -19,7 +19,7 @@ jobs:
         env:
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-          echo "Running SAST tool on mario source code..."
-          # Replace with actual SAST command, e.g., sonar-scanner or similar
-          echo "SAST analysis completed."
+        # run: |
+        #   echo "Running SAST tool on mario source code..."
+        #   # Replace with actual SAST command, e.g., sonar-scanner or similar
+        #   echo "SAST analysis completed."
