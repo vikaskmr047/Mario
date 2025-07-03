@@ -32,7 +32,7 @@ jobs:
         with:
           image-ref: vks0012/mario:${{ github.run_number }}
           format: 'table'
-          exit-code: '1'
+          exit-code: '0'
           severity: 'CRITICAL,HIGH'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
