@@ -1,0 +1,64 @@
+# File: .github/workflows/mario-playbook.yaml
+# This GitHub Actions workflow automates the process of scanning source code for vulnerabilities, building a Docker image, pushing it to Dockerhub, and deploying it to Azure AKS. It also runs Static Application Security Testing (SAST) using SonarQube and scans the Docker image with Trivy.
+# This workflow scans the source code for vulnerabilities, builds a Docker image, pushes it to Dockerhub, and deploys it to Azure AKS.
+# It also runs SAST using SonarQube and scans the Docker image with Trivy
+
+run-name: "Scan, build and deploy Mario application"
+on:
+  push:
+    branches:
+      - main
+
+jobs: 
+    run-sonarqube-sast:  
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout Repository
+          uses: actions/checkout@v3
+          with:
+           fetch-depth: 0  # Fetch all history for accurate analysis
+
+          
+        - name: Run SAST tool
+          uses: sonarsource/sonarqube-scan-action@master
+          env:
+            SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      
+        - name: SonarQube quality gate check
+          uses: sonarsource/sonarqube-quality-gate-action@master
+          timeout-minutes: 5
+          env:
+            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}   
+
+    build-and-push-docker-image: 
+        runs-on: ubuntu-latest
+        needs: run-sonarqube-sast
+        steps:
+          - name: Checkout Repository
+            uses: actions/checkout@v3
+
+          - name: Dockerhub Login
+            run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login --username "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+
+
+          - name: Build and Push Docker Image to Dockerhub
+            uses: docker/build-push-action@v2
+            with:
+                context: .
+                file: ./Dockerfile
+                push: true
+                tags: | 
+                    vks0012/mario:${{ github.run_number }}
+                    vks0012/mario:latest
+
+          - name: Run Trivy Scan
+            uses: aquasecurity/trivy-action@master
+            with:
+                image-ref: vks0012/mario:${{ github.run_number }}
+                format: 'table'
+                exit-code: '0'
+                severity: 'CRITICAL,HIGH'
+            env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
