@@ -26,3 +26,18 @@ jobs:
           tags: | 
             vks0012/mario:${{ github.run_number }}
             vks0012/mario:latest
+
+      - name: Run Trivy Scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: vks0012/mario:${{ github.run_number }}
+          format: sarif
+          output: trivy-scan-results.sarif
+          exit-code: '1'
+          severity: 'CRITICAL,HIGH'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+      
+          
