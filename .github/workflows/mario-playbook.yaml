@@ -50,6 +50,7 @@ jobs:
                 push: true
                 tags: | 
                     vks0012/mario:${{ github.run_number }}
+            run : echo "Docker image built and pushed successfully - vks0012/mario:${{ github.run_number }}"
 
           - name: Run Trivy Scan
             uses: aquasecurity/trivy-action@master
