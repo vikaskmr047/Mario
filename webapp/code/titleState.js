@@ -76,7 +76,7 @@ Mario.TitleState.prototype.Draw = function(context) {
 };
 
 Mario.TitleState.prototype.CheckForChange = function(context) {
-    if (Enjine.KeyboardInput.IsKeyDown(Enjine.Keys.Y)) {
+    if (Enjine.KeyboardInput.IsKeyDown(Enjine.Keys.S)) {
         context.ChangeState(Mario.GlobalMapState);
     }
 };
