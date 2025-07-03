@@ -50,7 +50,6 @@ jobs:
                 push: true
                 tags: | 
                     vks0012/mario:${{ github.run_number }}
-                    vks0012/mario:latest
 
           - name: Run Trivy Scan
             uses: aquasecurity/trivy-action@master
